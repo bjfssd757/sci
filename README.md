@@ -1,4 +1,7 @@
-# Tony's Convenience Injector
+# Slava's Convenience Injector
+
+> [!NOTE]
+> This is a fork of the [TCI project](https://github.com/antonioganea/tci). Thanks to [antonioganea](https://github.com/antonioganea) for creating this project and inspiring the development of this fork. I hope this leads to something good!
 
 ![TCI LOGO](docfiles/tci.png)
 
