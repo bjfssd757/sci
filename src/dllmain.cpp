@@ -1,6 +1,8 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 
 #include <Windows.h>
+#include <libloaderapi.h>
+#include <minwinbase.h>
 #include <thread>
 #include <errhandlingapi.h>
 #include <TCICore/bridge.h>
@@ -67,7 +69,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        // g_ExtensionExceptionHandler = AddVectoredExceptionHandler(1, OnExtensionExcept);
+        SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_USER_DIRS);    
 
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)HackThread, hModule, 0, nullptr));
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)GuiThread, hModule, 0, nullptr));
@@ -79,10 +81,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
         break;
 
     case DLL_PROCESS_DETACH:
-        // if (g_ExtensionExceptionHandler) {
-        //     RemoveVectoredExceptionHandler(g_ExtensionExceptionHandler);
-        //     g_ExtensionExceptionHandler = nullptr; 
-        // }
+        
         // Unsure if this is needed.
         //cleanup();
         break;

@@ -1,15 +1,12 @@
 #include <TCICore/extensions-api.h>
 #include <TCICore/tci-api.h>
 #include <excpt.h>
+#include <libloaderapi.h>
 #include <string>
-#include <thread>
 #include <vector>
-#include <setjmp.h>
 
 static inline DWORD SafetyCallFunc(ExtensionFunctionType func, const char *funcName, int argc, const char **argv);
 
-static thread_local jmp_buf g_ExtensionJumpBuffer;
-static thread_local bool g_InExtensionCall = false;
 thread_local CrashExtensionContext g_CrashExtensionContext;
 
 static ExtensionCacheEntry g_ExtensionCache[MAX_CACHE_SIZE] = {};
@@ -37,6 +34,12 @@ void LoadExtension(const char *extName) {
             strcpy_s(g_ExtensionCache[firstEmptyIdx].extName, MAX_EXT_NAME, extName);
             g_ExtensionCache[firstEmptyIdx].hModule = hModule;
             g_ExtensionCache[firstEmptyIdx].isOccupied = true;
+        } else {
+            ConsoleMessage(
+                std::string("Attempt to call unknown dll: ")
+                    .append(extName)
+                    .c_str()
+            );
         }
     } else {
         ConsoleMessage("Cache size limit exceeded");
@@ -100,4 +103,16 @@ static inline DWORD SafetyCallFunc(ExtensionFunctionType func, const char *funcN
     __except (EXCEPTION_EXECUTE_HANDLER) {
         return GetExceptionCode();
     }
+}
+
+void AddAllowedDirectory(std::string_view dir) {
+    if (dir.empty()) return;
+
+    int size = MultiByteToWideChar(CP_UTF8, 0, dir.data(), std::ssize(dir), nullptr, 0);
+    if (size <= 0) return;
+
+    std::wstring wstrTo(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, dir.data(), std::ssize(dir), wstrTo.data(), size);
+
+    AddDllDirectory(wstrTo.c_str());
 }

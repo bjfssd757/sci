@@ -24,3 +24,5 @@ struct CrashExtensionContext{
 SDKAPI void LoadExtension(const char *extName);
 SDKAPI void FreeExtension(const char *extName);
 SDKAPI void CallExtension(const char *extName, const char *funcName, int argc, const char **argv);
+
+void AddAllowedDirectory(std::string_view dir);
