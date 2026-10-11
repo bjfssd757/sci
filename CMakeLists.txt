@@ -43,6 +43,22 @@ FetchContent_MakeAvailable(safetyhook)
 #    "deps/minhook/src/hde/*.c"
 #)
 
+set(FT_DISABLE_ZLIB ON CACHE BOOL "" FORCE)
+set(FT_DISABLE_BZIP2 ON CACHE BOOL "" FORCE)
+set(FT_DISABLE_PNG ON CACHE BOOL "" FORCE)
+set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
+set(FT_DISABLE_BROTLI ON CACHE BOOL "" FORCE)
+
+add_subdirectory(deps/freetype)
+
+if(TARGET freetype AND NOT TARGET Freetype::Freetype)
+    add_library(Freetype::Freetype ALIAS freetype)
+endif()
+
+set(RMLUI_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+
+add_subdirectory(deps/RmlUi)
+
 # ImGui source files
 file(GLOB IMGUI_SRC
     "deps/imgui/imgui.cpp"
@@ -116,7 +132,7 @@ add_library(TCI_DLL SHARED
 target_compile_options(TCI_DLL PRIVATE $<$<CONFIG:Debug>:/Zi>) # MSVC
 # target_compile_options(your_dll PRIVATE $<$<CONFIG:Debug>:-g>) # GCC/Clang
 
-target_link_libraries(TCI_DLL PRIVATE safetyhook)
+target_link_libraries(TCI_DLL PRIVATE safetyhook RmlUi::Core)
 
 target_include_directories(TCI_DLL
     PUBLIC
