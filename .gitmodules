@@ -4,3 +4,9 @@
 [submodule "deps/lua"]
 	path = deps/lua
 	url = https://github.com/lua/lua
+[submodule "deps/RmlUI"]
+	path = deps/RmlUI
+	url = https://github.com/mikke89/RmlUi
+[submodule "deps/freetype"]
+	path = deps/freetype
+	url = https://github.com/freetype/freetype
