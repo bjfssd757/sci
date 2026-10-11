@@ -70,6 +70,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_USER_DIRS);    
+        AddAllowedDirectory(ALLOWED_DIRECTORY);
 
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)HackThread, hModule, 0, nullptr));
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)GuiThread, hModule, 0, nullptr));

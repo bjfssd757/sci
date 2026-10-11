@@ -7,6 +7,7 @@
 #define MAX_EXT_NAME 256
 #define MAX_CACHE_SIZE 64
 #define EXTENSION_ENTRYPOINT_NAME "TCIExtension"
+#define ALLOWED_DIRECTORY "DLLs"
 
 typedef void (*ExtensionFunctionType)(const char *, int, const char **);
 
