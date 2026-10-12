@@ -3,7 +3,9 @@
 #include <TCICore/gui.h>
 #include <TCICore/pattern.h>
 #include <TCICore/bridge-layout.h>
-#include <Windows.h>
+#include <TCICore/utils.h>
+#include <TCICore/tci-api.h>
+#include <TCICore/extensions-api.h>
 #include <cstdint>
 #include <iostream>
 #include <safetyhook.hpp>

@@ -10,6 +10,9 @@
 #include <TCICore/utils.h>
 #include <TCICore/gui.h>
 #include <TCICore/extensions-api.h>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 void AllocateConsole()
 {
@@ -21,13 +24,15 @@ void AllocateConsole()
 }
 
 DWORD WINAPI HackThread(HMODULE hModule) {
-
-    //AllocateConsole();
-
     console.AddLog("Setting data bridge..!\n");
     SetupDataBridge(); // blocks thread until bridge file is available for reading
 
     // ^ this will call the detour when ready.
+
+    AddDllDirectory(fs::canonical(GetAllowedDLLDir())
+        .make_preferred()
+        .c_str()
+    );
 
     return 0;
 }
@@ -69,9 +74,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_USER_DIRS);    
-        AddAllowedDirectory(ALLOWED_DIRECTORY);
-
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)HackThread, hModule, 0, nullptr));
         CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)GuiThread, hModule, 0, nullptr));
         break;
