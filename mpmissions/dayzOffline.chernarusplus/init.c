@@ -63,6 +63,8 @@ class CustomMission: MissionServer
 	int DLL_FLIP_NUMBER;
 
 	const int BRIDGE_SIZE = 256;
+	const int DLL_INTS_OUT_SIZE = 128;
+	const int DLL_INTS_IN_SIZE = 128;
 	int DLL_BRIDGE_BYTES[BRIDGE_SIZE];
 
 	int DLL_WATERMARK[4];
@@ -75,8 +77,8 @@ class CustomMission: MissionServer
 	int DLL_INTN_IN;
 	int DLL_INTN_OUT;
 
-	int DLL_INTS_IN[8];
-	int DLL_INTS_OUT[8];
+	int DLL_INTS_IN[DLL_INTS_OUT_SIZE];
+	int DLL_INTS_OUT[DLL_INTS_IN_SIZE];
 
 	int DLL_FLOATN_IN;
 	int DLL_FLOATN_OUT;
@@ -335,6 +337,21 @@ class CustomMission: MissionServer
 				}
 			}
 
+			if (DLL_COMMAND == 1028) { // GetPlayersOnServer
+				ref array<PlayerBase> players = new array<PlayerBase>;
+				GetPlayersOnServer(players);
+
+				DLL_INTN_OUT = players.Count(); 
+
+				for (int k = 0; k < players.Count(); k++) {
+					if (k >= DLL_INTS_OUT_SIZE) break;
+
+					DLL_INTS_OUT[k] = players[k].GetID(); 
+				}
+
+				delete players; 
+			}
+
 			if (DLL_COMMAND == 5681) {
 
 				// This search of the PlayerBase by PID can be optimized so there are no strings conversions and comparisons
@@ -453,6 +470,24 @@ class CustomMission: MissionServer
 		ref array<Man> players = new array<Man>;
 		GetGame().GetPlayers(players);
 		return players.Count();
+	}
+
+	void GetPlayersOnServer(out array<PlayerBase> out_players) {
+		out_players.Clear();
+
+		array<Man> men = new array<Man>;
+		GetGame().GetPlayers(men);
+		
+		foreach (Man man : men)
+		{
+			PlayerBase player = PlayerBase.Cast(man);
+			if (player)
+			{
+				out_players.Insert(player);
+			}
+		}
+
+		delete men;
 	}
 
 	Car SpawnCarAtPos(string type, vector pos)

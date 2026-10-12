@@ -1,3 +1,4 @@
+#include "TCICore/bridge-layout.h"
 #include <TCICore/tci-api.h>
 #include <TCICore/dll-lua.h>
 #include <TCICore/gui.h>
@@ -286,6 +287,23 @@ float GetCarFuelCapacity(int car) {
     goOutOfLua();
 
     return DLL_FLOATS_OUT[0];
+}
+
+void GetPlayersOnServer(char *buffer, size_t size, size_t *outSize) {
+    *DLL_INTN_OUT = 0;
+    *DLL_COMMAND = 1028;
+
+    goOutOfLua();
+
+    size_t playersFound = static_cast<size_t>(*DLL_INTN_OUT);
+
+    size_t toCopy = (playersFound < size) ? playersFound : size;
+
+    for (size_t i = 0; i < toCopy; i++) {
+        buffer[i] = DLL_INTS_OUT[i];
+    }
+
+    *outSize = toCopy;
 }
 
 void AnnounceAll_old() {

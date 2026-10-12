@@ -57,7 +57,7 @@ void SetupDataBridge()
         {
             console.AddLog("Found mov [rcx], eax | rax=%p rcx=%p | number at address %p", ctx.rax, ctx.rcx, (uint64_t)number);
 
-            uint64_t WATERMARK_ADDRESS = Pattern::PatternScanStartingAt(address+1024, 200,
+            uint64_t WATERMARK_ADDRESS = Pattern::PatternScanStartingAt(address + 1024, /* old: 200 */ 10000,
                 "01 3B AB E1 B3 BC AF F2 E3 1B 26 98 73 72 BC AD");
             
             if (WATERMARK_ADDRESS == 0)

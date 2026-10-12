@@ -16,6 +16,7 @@ SDKAPI Vector3f GetPlayerPosition(int playerID);
 SDKAPI void SetPlayerPosition(int playerID, Vector3f pos);
 
 SDKAPI int GetPlayerCount();
+SDKAPI void GetPlayersOnServer(int *buffer, size_t size);
 SDKAPI int GetPlayerBySteamID(long long steamID);
 SDKAPI long long GetPlayerSteamID(int playerID);
 

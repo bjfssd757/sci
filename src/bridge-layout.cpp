@@ -56,10 +56,12 @@ void bindBridgeLayout() {
     //ptr += 4; // QWORD alignment
 
     ptr += 8; // ES Array header
-    DLL_INTS_IN = (int*)ptr; ptr += 8 * sizeof(int);
+    // DLL_INTS_IN = (int*)ptr; ptr += 8 * sizeof(int);
+    DLL_INTS_IN = (int*)ptr; ptr += 128 * sizeof(int);
 
     ptr += 8; // ES Array header
-    DLL_INTS_OUT = (int*)ptr; ptr += 8 * sizeof(int);
+    // DLL_INTS_OUT = (int*)ptr; ptr += 8 * sizeof(int);
+    DLL_INTS_OUT = (int*)ptr; ptr += 128 * sizeof(int);
 
     DLL_FLOATN_IN = (int*)ptr; ptr += sizeof(int);
     DLL_FLOATN_OUT = (int*)ptr; ptr += sizeof(int);
